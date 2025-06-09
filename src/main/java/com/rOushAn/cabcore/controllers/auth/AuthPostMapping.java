@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,13 +27,20 @@ public class AuthPostMapping {
     }
 
     @PostMapping(path = "/signup")
-    public ResponseEntity<UserDto> signup(@RequestBody SignupDto signupDto) {
+    public ResponseEntity<UserDto> signup(@RequestBody SignupDto signupDto){
         UserDto user = authService.signup(signupDto);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
+    @PostMapping(path = "/onboardDriver/{userId}")
+    @Secured("ROLE_ADMIN")
+    public ResponseEntity<DriverDto> onboardDriver(@PathVariable Long userId, @RequestBody OnboardDriverDto onboardDriverDto){
+        DriverDto driver = authService.onboardNewDriver(userId, onboardDriverDto);
+        return new ResponseEntity<>(driver, HttpStatus.CREATED);
+    }
+
     @PostMapping(path = "/login")
-    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse httpServletResponse) {
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse httpServletResponse){
         String[] tokens = authService.login(loginRequestDto);
         Cookie cookie = new Cookie("refreshToken", tokens[1]);
         cookie.setHttpOnly(true);
@@ -44,7 +52,7 @@ public class AuthPostMapping {
     }
 
     @PostMapping(path = "/refresh")
-    public ResponseEntity<LoginResponseDto> refreshToken(HttpServletRequest httpServletRequest) {
+    public ResponseEntity<LoginResponseDto> refreshToken(HttpServletRequest httpServletRequest){
         String refreshToken = Arrays
                 .stream(httpServletRequest
                         .getCookies())
