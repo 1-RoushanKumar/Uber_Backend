@@ -2,6 +2,7 @@ package com.rOushAn.cabcore.controllers.admin;
 
 import com.rOushAn.cabcore.dtos.DriverDto;
 import com.rOushAn.cabcore.dtos.OnboardDriverDto;
+import com.rOushAn.cabcore.dtos.UserDto;
 import com.rOushAn.cabcore.service.AuthService;
 import com.rOushAn.cabcore.service.DriverService;
 import org.springframework.data.domain.Page;
@@ -35,6 +36,22 @@ public class AdminController {
     @GetMapping("/drivers")
     public ResponseEntity<Page<DriverDto>> getAllDrivers(Pageable pageable) {
         return ResponseEntity.ok(driverService.getAllDrivers(pageable));
+    }
+
+    @GetMapping("/drivers/{driverId}")
+    public ResponseEntity<DriverDto> getDriverDetails(@PathVariable Long driverId) {
+        return ResponseEntity.ok(driverService.getDriverDetails(driverId));
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<Page<UserDto>> getAllUsers(Pageable pageable) {
+        return ResponseEntity.ok(authService.getAllUsers(pageable));
+    }
+
+    @DeleteMapping("/users/{userId}")
+    public ResponseEntity<?> deactivateUser(@PathVariable Long userId) {
+        authService.deactivateUser(userId);
+        return ResponseEntity.ok().build();
     }
 
 }

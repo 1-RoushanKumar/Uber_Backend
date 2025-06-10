@@ -207,4 +207,10 @@ public class DriverServiceImpl implements DriverService {
                 .map(driver -> modelMapper.map(driver, DriverDto.class));
     }
 
+    @Override
+    public DriverDto getDriverDetails(Long id) {
+        Driver driver = driverRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Driver not found with ID: " + id));
+        return modelMapper.map(driver, DriverDto.class);
+    }
+
 }

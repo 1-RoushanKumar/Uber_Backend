@@ -12,6 +12,8 @@ import com.rOushAn.cabcore.service.*;
 import com.rOushAn.cabcore.utils.GeometryUtil;
 import org.locationtech.jts.geom.Point;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -121,5 +123,16 @@ public class AuthServiceImpl implements AuthService {
 
         String accessToken = jwtService.getAccessJwtToken(user);
         return new LoginResponseDto(accessToken);
+    }
+
+    @Override
+    public Page<UserDto> getAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable)
+                .map(user -> modelMapper.map(user, UserDto.class));
+    }
+
+    @Override
+    public void deactivateUser(Long userId) {
+        userRepository.deleteById(userId);
     }
 }
