@@ -117,10 +117,11 @@
         </dependency>
 
         <!-- ModelMapper -->
+        <!-- https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
         <dependency>
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
-            <version>3.2.2</version>
+            <version>3.2.3</version>
         </dependency>
 
         <!-- Hibernate Spatial (for geolocation, etc.) -->
