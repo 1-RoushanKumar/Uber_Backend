@@ -55,4 +55,6 @@ public interface DriverService {
 
     @Transactional
     VehicleDto deactivateVehicle(Long vehicleId);
+
+    DriverDto toggleDriverAvailability();
 }

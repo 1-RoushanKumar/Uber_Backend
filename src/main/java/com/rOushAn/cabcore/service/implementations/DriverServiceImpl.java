@@ -7,9 +7,12 @@ import com.rOushAn.cabcore.entities.enums.RideStatus;
 import com.rOushAn.cabcore.exceptions.ResourceNotFoundException;
 import com.rOushAn.cabcore.exceptions.RuntimeConflictException;
 import com.rOushAn.cabcore.repositories.DriverRepository;
+import com.rOushAn.cabcore.repositories.UserRepository;
 import com.rOushAn.cabcore.repositories.VehicleRepository;
 import com.rOushAn.cabcore.service.*;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -25,6 +28,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class DriverServiceImpl implements DriverService {
+
+    private static final Logger logger = LoggerFactory.getLogger(DriverServiceImpl.class);
 
     private final RideRequestService rideRequestService;
     private final DriverRepository driverRepository;
@@ -336,4 +341,16 @@ public class DriverServiceImpl implements DriverService {
         return modelMapper.map(savedVehicle, VehicleDto.class);
     }
 
+    @Override
+    @Transactional
+    public DriverDto toggleDriverAvailability() {
+        Driver driver = getCurrentDriver();
+        boolean newAvailability = !driver.getAvailable(); // Toggle the current status
+        driver.setAvailable(newAvailability);
+        driverRepository.save(driver);
+
+        logger.info("Driver {} (ID: {}) availability toggled to {}", driver.getUser().getEmail(), driver.getId(), newAvailability);
+
+        return modelMapper.map(driver, DriverDto.class);
+    }
 }

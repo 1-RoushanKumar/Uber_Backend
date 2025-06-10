@@ -1,9 +1,6 @@
 package com.rOushAn.cabcore.controllers.driver;
 
-import com.rOushAn.cabcore.dtos.DriverRideDto;
-import com.rOushAn.cabcore.dtos.RatingDto;
-import com.rOushAn.cabcore.dtos.RideStartDto;
-import com.rOushAn.cabcore.dtos.RiderDto;
+import com.rOushAn.cabcore.dtos.*;
 import com.rOushAn.cabcore.service.DriverService;
 import com.rOushAn.cabcore.service.RatingManagementService;
 import org.springframework.http.ResponseEntity;
@@ -45,5 +42,12 @@ public class DriverPostMapping {
     @PostMapping("/rateRider/{rideId}")
     public ResponseEntity<RiderDto> rateRider(@PathVariable Long rideId, @RequestBody RatingDto ratingDto) {
         return ResponseEntity.ok(driverService.rateRider(rideId, ratingDto.getRating()));
+    }
+
+    //Allows drivers to explicitly control their availability, which is crucial for managing ride requests and dispatching.
+    @PutMapping("/toggleAvailability")
+    public ResponseEntity<DriverDto> toggleAvailability() {
+        DriverDto driverDto = driverService.toggleDriverAvailability();
+        return ResponseEntity.ok(driverDto);
     }
 }
