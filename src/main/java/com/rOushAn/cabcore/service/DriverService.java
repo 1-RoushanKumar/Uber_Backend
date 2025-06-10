@@ -8,6 +8,8 @@ import com.rOushAn.cabcore.entities.Driver;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface DriverService {
 
     DriverRideDto acceptRide(Long rideRequestId);
@@ -33,4 +35,6 @@ public interface DriverService {
     Driver updateDriverAvailability(Driver driver, boolean available);
 
     Driver createNewDriver(Driver createDriver);
+
+    List<DriverDto> getAllDrivers();
 }
