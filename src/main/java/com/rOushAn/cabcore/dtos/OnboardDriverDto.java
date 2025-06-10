@@ -1,24 +1,23 @@
 package com.rOushAn.cabcore.dtos;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+
 public class OnboardDriverDto {
 
-    private Long vehicleId;
+    @NotNull(message = "Current location is required for driver onboarding")
     private PointDto currentLocation;
 
-    public OnboardDriverDto(Long vehicleId, PointDto currentLocation) {
-        this.vehicleId = vehicleId;
-        this.currentLocation = currentLocation;
-    }
+    @Valid
+    @NotNull(message = "Vehicle details are required for driver onboarding")
+    private AddVehicleDto vehicleDetails;
 
     public OnboardDriverDto() {
     }
 
-    public Long getVehicleId() {
-        return vehicleId;
-    }
-
-    public void setVehicleId(Long vehicleId) {
-        this.vehicleId = vehicleId;
+    public OnboardDriverDto(PointDto currentLocation, AddVehicleDto vehicleDetails) {
+        this.currentLocation = currentLocation;
+        this.vehicleDetails = vehicleDetails;
     }
 
     public PointDto getCurrentLocation() {
@@ -27,5 +26,13 @@ public class OnboardDriverDto {
 
     public void setCurrentLocation(PointDto currentLocation) {
         this.currentLocation = currentLocation;
+    }
+
+    public AddVehicleDto getVehicleDetails() {
+        return vehicleDetails;
+    }
+
+    public void setVehicleDetails(AddVehicleDto vehicleDetails) {
+        this.vehicleDetails = vehicleDetails;
     }
 }

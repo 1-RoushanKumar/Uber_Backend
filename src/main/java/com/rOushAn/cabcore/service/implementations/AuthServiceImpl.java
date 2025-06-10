@@ -100,7 +100,6 @@ public class AuthServiceImpl implements AuthService {
                 .available(true)
                 .rating(0.0)
                 .user(user)
-                .vehicleId(onboardDriverDto.getVehicleId())
                 .currentLocation(currentLocation)
                 .build();
 
@@ -109,7 +108,7 @@ public class AuthServiceImpl implements AuthService {
         user.setRoles(updatedRoles);
 
         userRepository.save(user);
-        Driver savedDriver = driverService.createNewDriver(createDriver);
+        Driver savedDriver = driverService.createNewDriver(createDriver, onboardDriverDto.getVehicleDetails());
 
         return modelMapper.map(savedDriver, DriverDto.class);
     }

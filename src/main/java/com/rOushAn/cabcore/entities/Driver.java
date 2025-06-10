@@ -4,12 +4,13 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import org.locationtech.jts.geom.Point;
+
+import java.util.List;
 
 @Entity
 @Table(indexes = {
-        @Index(name = "idx_driver_vehicle_id", columnList = "vehicleId"),
+        @Index(name = "idx_driver_vehicle_id", columnList = "current_vehicle_id"),
         @Index(name = "idx_driver_user", columnList = "user_id")
 })
 public class Driver {
@@ -34,20 +35,26 @@ public class Driver {
     @Column(columnDefinition = "Geometry(Point, 4326)")
     private Point currentLocation;
 
-    @Positive(message = "Vehicle ID must be a positive number")
-    private Long vehicleId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "current_vehicle_id")
+    private Vehicle currentVehicle;
+
+    @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Vehicle> registeredVehicles;
 
     public Driver() {
     }
 
-    public Driver(DriverBuilder builder) {
-        this.id = builder.id;
-        this.user = builder.user;
-        this.rating = builder.rating;
-        this.available = builder.available;
-        this.currentLocation = builder.currentLocation;
-        this.vehicleId = builder.vehicleId;
+    public Driver(DriverBuilder driverBuilder) {
+        this.id = driverBuilder.id;
+        this.user = driverBuilder.user;
+        this.rating = driverBuilder.rating;
+        this.available = driverBuilder.available;
+        this.currentLocation = driverBuilder.currentLocation;
+        this.currentVehicle = driverBuilder.currentVehicle;
+        this.registeredVehicles = driverBuilder.registeredVehicles;
     }
+
 
     public Long getId() {
         return id;
@@ -89,12 +96,20 @@ public class Driver {
         this.currentLocation = currentLocation;
     }
 
-    public Long getVehicleId() {
-        return vehicleId;
+    public Vehicle getCurrentVehicle() {
+        return currentVehicle;
     }
 
-    public void setVehicleId(Long vehicleId) {
-        this.vehicleId = vehicleId;
+    public void setCurrentVehicle(Vehicle currentVehicle) {
+        this.currentVehicle = currentVehicle;
+    }
+
+    public List<Vehicle> getRegisteredVehicles() {
+        return registeredVehicles;
+    }
+
+    public void setRegisteredVehicles(List<Vehicle> registeredVehicles) {
+        this.registeredVehicles = registeredVehicles;
     }
 
     public static class DriverBuilder {
@@ -104,7 +119,8 @@ public class Driver {
         private Double rating;
         private Boolean available;
         private Point currentLocation;
-        private Long vehicleId;
+        private Vehicle currentVehicle;
+        private List<Vehicle> registeredVehicles;
 
         public DriverBuilder id(Long id) {
             this.id = id;
@@ -131,10 +147,16 @@ public class Driver {
             return this;
         }
 
-        public DriverBuilder vehicleId(Long vehicleId) {
-            this.vehicleId = vehicleId;
+        public DriverBuilder currentVehicle(Vehicle currentVehicle) {
+            this.currentVehicle = currentVehicle;
             return this;
         }
+
+        public DriverBuilder registeredVehicles(List<Vehicle> registeredVehicles) {
+            this.registeredVehicles = registeredVehicles;
+            return this;
+        }
+
 
         public Driver build() {
             return new Driver(this);
