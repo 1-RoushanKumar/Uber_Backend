@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -101,7 +102,10 @@ public class AuthServiceImpl implements AuthService {
                 .currentLocation(currentLocation)
                 .build();
 
-        user.getRoles().add(Roles.DRIVER);
+        Set<Roles> updatedRoles = new HashSet<>(user.getRoles());
+        updatedRoles.add(Roles.DRIVER);
+        user.setRoles(updatedRoles);
+
         userRepository.save(user);
         Driver savedDriver = driverService.createNewDriver(createDriver);
 
