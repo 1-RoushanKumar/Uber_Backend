@@ -1,1 +1,7 @@
 2025-06-09 17:05:16 [http-nio-8000-exec-4] INFO  com.rOushAn.cabcore.service.implementations.NotificationServiceImpl - Email sent to: rocky05393@gmail.com | Subject: New Ride Request
+2025-06-09 17:26:35 [http-nio-8000-exec-7] INFO  com.rOushAn.cabcore.service.implementations.NotificationServiceImpl - Email sent to: rocky05393@gmail.com | Subject: New Ride Request
+2025-06-09 17:27:45 [http-nio-8000-exec-6] INFO  com.rOushAn.cabcore.service.implementations.NotificationServiceImpl - Email sent to: rk04393@gmail.com | Subject: Your Ride OTP
+2025-06-10 12:34:10 [http-nio-8000-exec-5] INFO  com.rOushAn.cabcore.service.implementations.NotificationServiceImpl - Email sent to: rk04393@gmail.com | Subject: New Ride Request
+2025-06-10 12:35:21 [http-nio-8000-exec-3] INFO  com.rOushAn.cabcore.service.implementations.NotificationServiceImpl - Email sent to: rocky05393@gmail.com | Subject: Your Ride OTP
+2025-06-10 12:37:55 [http-nio-8000-exec-10] INFO  com.rOushAn.cabcore.service.implementations.RatingManagementServiceImpl - 0.0
+2025-06-10 12:45:27 [http-nio-8000-exec-9] INFO  com.rOushAn.cabcore.service.implementations.NotificationServiceImpl - Email sent to: rk04393@gmail.com | Subject: New Ride Request
