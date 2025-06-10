@@ -4,6 +4,8 @@ import com.rOushAn.cabcore.dtos.DriverDto;
 import com.rOushAn.cabcore.dtos.OnboardDriverDto;
 import com.rOushAn.cabcore.service.AuthService;
 import com.rOushAn.cabcore.service.DriverService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -31,8 +33,8 @@ public class AdminController {
     }
 
     @GetMapping("/drivers")
-    public ResponseEntity<List<DriverDto>> getAllDrivers() {
-        return ResponseEntity.ok(driverService.getAllDrivers());
+    public ResponseEntity<Page<DriverDto>> getAllDrivers(Pageable pageable) {
+        return ResponseEntity.ok(driverService.getAllDrivers(pageable));
     }
 
 }

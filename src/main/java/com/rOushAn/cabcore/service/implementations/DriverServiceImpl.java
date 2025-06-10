@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 
 @Service
@@ -203,12 +202,9 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public List<DriverDto> getAllDrivers() {
-        List<Driver> drivers = driverRepository.findAll();
-
-        return drivers.stream()
-                .map(driver -> modelMapper.map(driver, DriverDto.class))
-                .toList();  // Or collect(Collectors.toList()) for Java < 16
+    public Page<DriverDto> getAllDrivers(Pageable pageable) {
+        return driverRepository.findAll(pageable)
+                .map(driver -> modelMapper.map(driver, DriverDto.class));
     }
 
 }

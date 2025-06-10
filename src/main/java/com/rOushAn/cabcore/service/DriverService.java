@@ -36,5 +36,5 @@ public interface DriverService {
 
     Driver createNewDriver(Driver createDriver);
 
-    List<DriverDto> getAllDrivers();
+    Page<DriverDto> getAllDrivers(Pageable pageable);
 }
