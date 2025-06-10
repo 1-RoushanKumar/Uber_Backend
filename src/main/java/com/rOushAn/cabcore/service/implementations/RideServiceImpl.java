@@ -1,5 +1,6 @@
 package com.rOushAn.cabcore.service.implementations;
 
+import com.rOushAn.cabcore.dtos.RideDto;
 import com.rOushAn.cabcore.entities.Driver;
 import com.rOushAn.cabcore.entities.Ride;
 import com.rOushAn.cabcore.entities.RideRequest;
@@ -82,6 +83,12 @@ public class RideServiceImpl implements RideService {
         String body = "Dear Rider,\n\nYour OTP for the confirmed ride is: " + otp +
                       "\n\nPlease share this OTP only with your driver upon pickup.\n\nThank you!";
         notificationService.sendEmail(riderEmail, subject, body);
+    }
+
+    @Override
+    public Page<RideDto> getAllRides(Pageable pageable) {
+        return rideRepository.findAll(pageable)
+                .map(ride -> modelMapper.map(ride, RideDto.class));
     }
 
 }

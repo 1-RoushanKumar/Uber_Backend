@@ -1,5 +1,6 @@
 package com.rOushAn.cabcore.service;
 
+import com.rOushAn.cabcore.dtos.RideDto;
 import com.rOushAn.cabcore.entities.Driver;
 import com.rOushAn.cabcore.entities.Ride;
 import com.rOushAn.cabcore.entities.RideRequest;
@@ -19,4 +20,6 @@ public interface RideService {
     Page<Ride> getAllRidesOfRider(Rider rider, Pageable pageRequest);
 
     Page<Ride> getAllRidesOfDriver(Driver driver, Pageable pageRequest);
+
+    Page<RideDto> getAllRides(Pageable pageable);
 }
