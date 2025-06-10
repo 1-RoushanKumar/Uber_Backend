@@ -32,13 +32,6 @@ public class AuthPostMapping {
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
-    @PostMapping(path = "/onboardDriver/{userId}")
-    @Secured("ROLE_ADMIN")
-    public ResponseEntity<DriverDto> onboardDriver(@PathVariable Long userId, @RequestBody OnboardDriverDto onboardDriverDto){
-        DriverDto driver = authService.onboardNewDriver(userId, onboardDriverDto);
-        return new ResponseEntity<>(driver, HttpStatus.CREATED);
-    }
-
     @PostMapping(path = "/login")
     public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse httpServletResponse){
         String[] tokens = authService.login(loginRequestDto);
