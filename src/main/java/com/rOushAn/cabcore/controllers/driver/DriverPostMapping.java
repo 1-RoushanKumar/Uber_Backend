@@ -4,6 +4,7 @@ import com.rOushAn.cabcore.dtos.*;
 import com.rOushAn.cabcore.service.DriverService;
 import com.rOushAn.cabcore.service.RatingManagementService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/driver")
 @Secured("ROLE_DRIVER")
 @Tag(name = "Driver - Ride Actions & Availability", description = "Endpoints for drivers to manage ride lifecycle, update location, and control availability.")
+@SecurityRequirement(name = "bearerAuth") // Apply JWT security to all endpoints in this controller
 public class DriverPostMapping {
 
     private final DriverService driverService;

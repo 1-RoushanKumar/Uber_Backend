@@ -8,6 +8,7 @@ import com.rOushAn.cabcore.service.AuthService;
 import com.rOushAn.cabcore.service.DriverService;
 import com.rOushAn.cabcore.service.RideService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +20,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/admin")
 @Secured("ROLE_ADMIN")
-@Tag(name = "Admin Controller", description = "Operations accessible only by administrators") // Tag for the controller
+@Tag(name = "Admin Controller", description = "Operations accessible only by administrators")
+@SecurityRequirement(name = "bearerAuth")
 public class AdminController {
 
     private final AuthService authService;
