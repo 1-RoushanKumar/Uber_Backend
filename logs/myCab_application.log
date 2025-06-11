@@ -169,3 +169,6 @@ java.lang.IllegalArgumentException: To, Subject, and Body must not be null or em
 	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:658)
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
 	at java.base/java.lang.Thread.run(Thread.java:1447)
+2025-06-11 12:18:58 [http-nio-8000-exec-1] INFO  com.rOushAn.cabcore.service.implementations.NotificationServiceImpl - Email sent to: rocky05393@gmail.com | Subject: New Ride Request
+2025-06-11 12:20:03 [http-nio-8000-exec-8] INFO  com.rOushAn.cabcore.service.implementations.NotificationServiceImpl - Email sent to: nk@gmail.com | Subject: Your Ride OTP
+2025-06-11 12:27:02 [http-nio-8000-exec-3] INFO  com.rOushAn.cabcore.service.implementations.RatingManagementServiceImpl - 0.0

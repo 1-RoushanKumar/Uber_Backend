@@ -6,7 +6,9 @@ import com.rOushAn.cabcore.entities.User;
 import com.rOushAn.cabcore.entities.enums.Roles;
 import com.rOushAn.cabcore.exceptions.ResourceNotFoundException;
 import com.rOushAn.cabcore.exceptions.RuntimeConflictException;
+import com.rOushAn.cabcore.repositories.RiderRepository;
 import com.rOushAn.cabcore.repositories.UserRepository;
+import com.rOushAn.cabcore.repositories.WalletRepository;
 import com.rOushAn.cabcore.security.JwtService;
 import com.rOushAn.cabcore.service.*;
 import com.rOushAn.cabcore.utils.GeometryUtil;
@@ -38,8 +40,10 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final UserService userService;
+    private final RiderRepository riderRepository;
+    private final WalletRepository walletRepository;
 
-    public AuthServiceImpl(ModelMapper modelMapper, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserService userService, JwtService jwtService, UserRepository userRepository, DriverService driverService, RiderService riderService, WalletService walletService) {
+    public AuthServiceImpl(ModelMapper modelMapper, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserService userService, JwtService jwtService, UserRepository userRepository, DriverService driverService, RiderService riderService, WalletService walletService, RiderRepository riderRepository, WalletRepository walletRepository) {
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.riderService = riderService;
@@ -49,6 +53,8 @@ public class AuthServiceImpl implements AuthService {
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
         this.userService = userService;
+        this.riderRepository = riderRepository;
+        this.walletRepository = walletRepository;
     }
 
     @Override
@@ -131,7 +137,10 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public void deactivateUser(Long userId) {
+        walletRepository.deleteByUserId(userId);
+        riderRepository.deleteByUserId(userId);
         userRepository.deleteById(userId);
     }
 }
