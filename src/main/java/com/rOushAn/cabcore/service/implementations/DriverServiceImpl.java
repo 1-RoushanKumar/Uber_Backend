@@ -7,7 +7,6 @@ import com.rOushAn.cabcore.entities.enums.RideStatus;
 import com.rOushAn.cabcore.exceptions.ResourceNotFoundException;
 import com.rOushAn.cabcore.exceptions.RuntimeConflictException;
 import com.rOushAn.cabcore.repositories.DriverRepository;
-import com.rOushAn.cabcore.repositories.UserRepository;
 import com.rOushAn.cabcore.repositories.VehicleRepository;
 import com.rOushAn.cabcore.service.*;
 import org.modelmapper.ModelMapper;
@@ -22,8 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -218,86 +215,6 @@ public class DriverServiceImpl implements DriverService {
         return modelMapper.map(driver, DriverDto.class);
     }
 
-    @Override
-    public VehicleDto addVehicle(AddVehicleDto addVehicleDto) {
-        Driver driver = getCurrentDriver();
-        Vehicle vehicle = modelMapper.map(addVehicleDto, Vehicle.class);
-        vehicle.setDriver(driver);
-        vehicle.setIsActive(false);
-        Vehicle savedVehicle = vehicleRepository.save(vehicle);
-        return modelMapper.map(savedVehicle, VehicleDto.class);
-    }
-
-    @Override
-    @Transactional
-    public VehicleDto updateVehicle(Long vehicleId, AddVehicleDto updateVehicleDto) {
-        Driver driver = getCurrentDriver();
-        Vehicle vehicle = vehicleRepository.findByDriverAndId(driver, vehicleId)
-                .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found or does not belong to current driver with ID: " + vehicleId));
-
-        modelMapper.map(updateVehicleDto, vehicle);
-        vehicle.setDriver(driver);
-
-        Vehicle updatedVehicle = vehicleRepository.save(vehicle);
-        return modelMapper.map(updatedVehicle, VehicleDto.class);
-    }
-
-    @Override
-    @Transactional
-    public void removeVehicle(Long vehicleId) {
-        Driver driver = getCurrentDriver();
-        Vehicle vehicle = vehicleRepository.findByDriverAndId(driver, vehicleId)
-                .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found or does not belong to current driver with ID: " + vehicleId));
-
-        if (vehicle.getIsActive()) {
-            throw new RuntimeConflictException("Cannot remove an active vehicle. Please select another vehicle first.");
-        }
-        if (driver.getCurrentVehicle() != null && driver.getCurrentVehicle().equals(vehicle)) {
-            driver.setCurrentVehicle(null);
-            driverRepository.save(driver);
-        }
-
-        vehicleRepository.delete(vehicle);
-    }
-
-    @Override
-    public List<VehicleDto> getMyVehicles() {
-        Driver driver = getCurrentDriver();
-        List<Vehicle> vehicles = vehicleRepository.findByDriver(driver);
-        return vehicles.stream()
-                .map(vehicle -> modelMapper.map(vehicle, VehicleDto.class))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    @Transactional
-    public VehicleDto selectActiveVehicle(Long vehicleId) {
-        Driver driver = getCurrentDriver();
-        Vehicle newActiveVehicle = vehicleRepository.findByDriverAndId(driver, vehicleId)
-                .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found or does not belong to current driver with ID: " + vehicleId));
-
-        vehicleRepository.findByDriverAndIsActiveTrue(driver).ifPresent(oldActiveVehicle -> {
-            oldActiveVehicle.setIsActive(false);
-            vehicleRepository.save(oldActiveVehicle);
-        });
-
-        newActiveVehicle.setIsActive(true);
-        vehicleRepository.save(newActiveVehicle);
-
-        driver.setCurrentVehicle(newActiveVehicle);
-        driverRepository.save(driver);
-
-        return modelMapper.map(newActiveVehicle, VehicleDto.class);
-    }
-
-    @Override
-    public VehicleDto getCurrentActiveVehicle() {
-        Driver driver = getCurrentDriver();
-        return vehicleRepository.findByDriverAndIsActiveTrue(driver)
-                .map(vehicle -> modelMapper.map(vehicle, VehicleDto.class))
-                .orElse(null);
-    }
-
     @Transactional
     @Override
     public Driver createNewDriver(Driver createDriver, AddVehicleDto initialVehicleDetails) {
@@ -319,27 +236,6 @@ public class DriverServiceImpl implements DriverService {
         return driverRepository.save(savedDriver);
     }
 
-    @Transactional
-    @Override
-    public VehicleDto deactivateVehicle(Long vehicleId) {
-        Driver driver = getCurrentDriver();
-        Vehicle vehicle = vehicleRepository.findByDriverAndId(driver, vehicleId)
-                .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found or does not belong to current driver with ID: " + vehicleId));
-
-        if (!vehicle.getIsActive()) {
-            throw new RuntimeConflictException("Vehicle with ID " + vehicleId + " is already inactive.");
-        }
-
-        vehicle.setIsActive(false);
-        Vehicle savedVehicle = vehicleRepository.save(vehicle);
-
-        if (driver.getCurrentVehicle() != null && driver.getCurrentVehicle().getId().equals(vehicleId)) {
-            driver.setCurrentVehicle(null);
-            driverRepository.save(driver);
-        }
-
-        return modelMapper.map(savedVehicle, VehicleDto.class);
-    }
 
     @Override
     @Transactional

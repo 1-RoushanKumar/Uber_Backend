@@ -38,23 +38,8 @@ public interface DriverService {
 
     DriverDto getDriverDetails(Long id);
 
-    VehicleDto addVehicle(AddVehicleDto addVehicleDto);
-
-    VehicleDto updateVehicle(Long vehicleId, AddVehicleDto updateVehicleDto);
-
-    void removeVehicle(Long vehicleId);
-
-    List<VehicleDto> getMyVehicles();
-
-    VehicleDto selectActiveVehicle(Long vehicleId);
-
-    VehicleDto getCurrentActiveVehicle();
-
     @Transactional
     Driver createNewDriver(Driver createDriver, AddVehicleDto initialVehicleDetails);
-
-    @Transactional
-    VehicleDto deactivateVehicle(Long vehicleId);
 
     DriverDto toggleDriverAvailability();
 }
